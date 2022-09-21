@@ -8,4 +8,4 @@ function checkLength(commentary, maxLength)
 }
 
 getRandomInt(0, 10);
-checkLength('abx', 10)
+checkLength('abx', 10);
