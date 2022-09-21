@@ -1,9 +1,11 @@
-function GetRandomInt(min, max) {
+function getRandomInt(min, max) {
   return Math.floor( Math.random() * (max - min + 1) + min);
 }
 
-function CheckLength(commentary, maxLength)
+function checkLength(commentary, maxLength)
 {
   return commentary.length <= maxLength;
 }
 
+getRandomInt(0, 10);
+checkLength("abx", 10)
