@@ -14,10 +14,10 @@ function checkLength(commentary, maxLength)
 
 function generateComments(count)
 {
-  let comments = [];
+  const comments = [];
   for (let i = 0; i < count; i++)
   {
-    let comment = {
+    const comment = {
       id: lastCommentIndex++,
       avatar: `img/avatar-${getRandomInt(1, 6)}.svg`,
       message: randomComments[getRandomInt(0, randomComments.length - 1)],
@@ -30,10 +30,10 @@ function generateComments(count)
 
 function generatePhotos(count)
 {
-  let photos = [];
+  const photos = [];
   for (let i = 0; i < count; i++)
   {
-    let photo = {
+    const photo = {
       id: i + 1,
       url: `photos/${i + 1}.jpg`,
       description: 'Мудрое дерево.',
