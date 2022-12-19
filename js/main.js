@@ -1,5 +1,6 @@
 import {generatePhotos} from './data.js';
-import {checkLength} from './util';
+import {checkLength} from './util.js';
+import {renderThumbnails} from './renderer.js';
 
 checkLength('abc', 10);
-generatePhotos(25);
+renderThumbnails(generatePhotos(25));
