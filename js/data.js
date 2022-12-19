@@ -15,7 +15,7 @@ function generateComments(count)
     const comment = {
       id: lastCommentIndex++,
       avatar: `img/avatar-${getRandomInt(minPictureIndex, maxPictureIndex)}.svg`,
-      message: RANDOM_COMMENTS[getRandomInt(0, RANDOM_COMMENTS - 1)],
+      message: RANDOM_COMMENTS[getRandomInt(0, RANDOM_COMMENTS.length - 1)],
       name: NAMES[getRandomInt(0, NAMES.length - 1)]
     };
     comments.push(comment);
@@ -28,7 +28,7 @@ export function generatePhotos(count)
   const photos = [];
   const minLikesCount = 15;
   const maxLikesCount = 200;
-  const commentsCount = 10;
+  const commentsCount = 15;
   for (let i = 0; i < count; i++)
   {
     const photo = {

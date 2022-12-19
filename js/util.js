@@ -1,9 +1,5 @@
-export function getRandomInt(min, max)
-{
-  return Math.floor( Math.random() * (max - min + 1) + min);
-}
+export const getRandomInt = (min, max) => Math.floor( Math.random() * (max - min + 1) + min);
 
-export function checkLength(commentary, maxLength)
-{
-  return commentary.length <= maxLength;
-}
+export const checkLength = (commentary, maxLength) => commentary.length <= maxLength;
+
+export const isEscapeKeyPressed = (evt) => evt.key === 'Escape';
