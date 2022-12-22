@@ -2,6 +2,7 @@ import {isEscapeKeyPressed, checkLength, anyElementIsDuplicated} from './util.js
 import {setSlider, addEffectsListClickHandler, removeEffectsListClickHandler} from './effects.js';
 import {changeImageScale, DEFAULT_SCALE_VALUE, removeZoomButtonsClickHandlers, addZoomButtonsClickHandlers} from './scale-slider.js';
 import {sendData} from './api.js';
+import {uploadUserPhoto} from './image-uploader.js';
 
 const MAX_DESCRIPTION_LENGTH = 140;
 const MAX_HASHTAG_LENGTH = 20;
@@ -119,6 +120,7 @@ const openForm = () => {
   document.addEventListener('keydown', onEscKeydown);
   addEffectsListClickHandler();
   addZoomButtonsClickHandlers();
+  uploadUserPhoto();
   addSubmitButtonHandler();
 };
 
