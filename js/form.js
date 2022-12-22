@@ -1,4 +1,6 @@
 import {isEscapeKeyPressed, checkLength, anyElementIsDuplicated} from './util.js';
+import {setSlider, addEffectsListClickHandler, removeEffectsListClickHandler} from './effects.js';
+import {changeImageScale, DEFAULT_SCALE_VALUE, removeZoomButtonsClickHandlers, addZoomButtonsClickHandlers} from './scale-slider.js';
 
 const MAX_DESCRIPTION_LENGTH = 140;
 const MAX_HASHTAG_LENGTH = 20;
@@ -90,11 +92,15 @@ const removeSubmitButtonHandler = () => {
 const closeForm = () => {
   overlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
+  setSlider('none');
+  changeImageScale(DEFAULT_SCALE_VALUE);
   uploadForm.value = '';
   scaleControl.value = '100%';
   overlay.querySelector('.text__hashtags').value = '';
   overlay.querySelector('.text__description').value = '';
   uploadFileInput.value = '';
+  removeZoomButtonsClickHandlers();
+  removeEffectsListClickHandler();
   removeSubmitButtonHandler();
 };
 
@@ -103,6 +109,8 @@ const openForm = () => {
   document.body.classList.add('modal-open');
   closeButton.addEventListener('click', closeForm);
   document.addEventListener('keydown', onEscKeydown);
+  addEffectsListClickHandler();
+  addZoomButtonsClickHandlers();
   addSubmitButtonHandler();
 };
 
