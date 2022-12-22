@@ -1,3 +1,5 @@
+const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
+
 const checkLength = (commentary, maxLength) => commentary.length <= maxLength;
 
 const arrayContainsElement = (array, element) => array.indexOf(element) >= 0;
@@ -17,4 +19,24 @@ const anyElementIsDuplicated = (array) => {
   return false;
 };
 
-export {checkLength, isEscapeKeyPressed, anyElementIsDuplicated};
+const debounce = (callback, timeoutDelay = 500) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+function throttle (callback, delayBetweenFrames) {
+  let lastTime = 0;
+
+  return (...rest) => {
+    const now = new Date();
+    if (now - lastTime >= delayBetweenFrames) {
+      callback.apply(this, rest);
+      lastTime = now;
+    }
+  };
+}
+
+export {getRandomInt, checkLength, isEscapeKeyPressed, anyElementIsDuplicated, debounce, throttle};
