@@ -4,6 +4,13 @@ const body = document.querySelector('body');
 const picTemplate = body.querySelector('#picture');
 const picturesParent = body.querySelector('.pictures');
 
+const removeOldThumbnails = () => {
+  const oldThumbnails = document.querySelectorAll('.pictures .picture');
+  oldThumbnails.forEach((oldThumbnail) => {
+    oldThumbnail.remove();
+  });
+};
+
 const getUserPictureDomElement = (pictureObject) => {
   const picture = picTemplate.content.querySelector('.picture').cloneNode(true);
 
@@ -43,5 +50,6 @@ const insertUserPictureDomElements = (pictureDomElements) => {
 };
 
 export const renderThumbnails = (photos) => {
+  removeOldThumbnails();
   insertUserPictureDomElements(getUserPictureDomElements(photos));
 };
