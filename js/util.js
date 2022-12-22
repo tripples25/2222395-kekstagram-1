@@ -1,18 +1,8 @@
-const getRandomInt = (min, max) => {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-};
+const checkLength = (commentary, maxLength) => commentary.length <= maxLength;
 
-const checkLength = (commentary, maxLength) => {
-  return commentary.length <= maxLength;
-};
+const arrayContainsElement = (array, element) => array.indexOf(element) >= 0;
 
-const arrayContainsElement = (array, element) => {
-  return array.indexOf(element) >= 0;
-};
-
-const isEscapeKeyPressed = (evt) => {
-  return evt.key === 'Escape';
-};
+const isEscapeKeyPressed = (evt) => evt.key === 'Escape';
 
 const anyElementIsDuplicated = (array) => {
   const temp = array.slice();
@@ -27,4 +17,4 @@ const anyElementIsDuplicated = (array) => {
   return false;
 };
 
-export {getRandomInt, checkLength, isEscapeKeyPressed, anyElementIsDuplicated};
+export {checkLength, isEscapeKeyPressed, anyElementIsDuplicated};

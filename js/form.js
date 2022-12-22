@@ -1,6 +1,7 @@
 import {isEscapeKeyPressed, checkLength, anyElementIsDuplicated} from './util.js';
 import {setSlider, addEffectsListClickHandler, removeEffectsListClickHandler} from './effects.js';
 import {changeImageScale, DEFAULT_SCALE_VALUE, removeZoomButtonsClickHandlers, addZoomButtonsClickHandlers} from './scale-slider.js';
+import {sendData} from './api.js';
 
 const MAX_DESCRIPTION_LENGTH = 140;
 const MAX_HASHTAG_LENGTH = 20;
@@ -13,7 +14,9 @@ const overlay = document.querySelector('.img-upload__overlay');
 const closeButton = document.querySelector('#upload-cancel');
 const scaleControl = document.querySelector('.scale__control--value');
 const descriptionField = uploadForm.querySelector('[name="description"]');
+const noneEffects = uploadForm.querySelector('#effect-none');
 const hashtagsField = uploadForm.querySelector('[name="hashtags"]');
+
 
 const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -81,6 +84,14 @@ const submitForm = (evt) => {
   }
 };
 
+const setToDefaults = () => {
+  changeImageScale(DEFAULT_SCALE_VALUE);
+  setSlider('none');
+  hashtagsField.value = '';
+  descriptionField.value = '';
+  noneEffects.checked = true;
+};
+
 const addSubmitButtonHandler = () => {
   uploadForm.addEventListener('submit', submitForm);
 };
@@ -92,13 +103,10 @@ const removeSubmitButtonHandler = () => {
 const closeForm = () => {
   overlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  setSlider('none');
-  changeImageScale(DEFAULT_SCALE_VALUE);
   uploadForm.value = '';
   scaleControl.value = '100%';
-  overlay.querySelector('.text__hashtags').value = '';
-  overlay.querySelector('.text__description').value = '';
   uploadFileInput.value = '';
+  setToDefaults();
   removeZoomButtonsClickHandlers();
   removeEffectsListClickHandler();
   removeSubmitButtonHandler();
@@ -114,8 +122,80 @@ const openForm = () => {
   addSubmitButtonHandler();
 };
 
-export const prepareForm = () => {
-  uploadForm.onchange = openForm;
+const onSuccessEscKeydown = (evt) => {
+  if (isEscapeKeyPressed(evt)) {
+    evt.preventDefault();
+    closeSuccessUploadMessage();
+  }
+};
+
+const onErrorEscKeydown = (evt) => {
+  if (isEscapeKeyPressed(evt)) {
+    evt.preventDefault();
+    closeErrorUploadMessage();
+  }
+};
+
+const onSuccessOuterAreaClick = (evt) => {
+  if (evt.target.closest('.success__inner') === null) {
+    closeSuccessUploadMessage();
+  }
+};
+
+const onErrorOuterAreaClick = (evt) => {
+  if (evt.target.closest('.error__inner') === null) {
+    closeErrorUploadMessage();
+  }
+};
+
+function closeSuccessUploadMessage() {
+  closeForm();
+  document.querySelector('.success').remove();
+  document.removeEventListener('keydown', onSuccessEscKeydown);
+  document.addEventListener('keydown', closeForm);
+  document.removeEventListener('click', onSuccessOuterAreaClick);
+}
+
+function closeErrorUploadMessage() {
+  closeForm();
+  document.querySelector('.error').remove();
+  document.removeEventListener('keydown', onErrorEscKeydown);
+  document.addEventListener('keydown', closeForm);
+  document.removeEventListener('click', onErrorOuterAreaClick);
+}
+
+const setUserFormSubmit = (onSuccess, onError) => {
+  uploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    if (pristine.validate()) {
+      sendData(
+        () => {
+          onSuccess();
+        },
+        () => {
+          onError();
+        },
+        new FormData(uploadForm)
+      );
+    }
+  });
+};
+
+const showSummaryUploadMessage = (messageTemplate) => {
+  const message = messageTemplate.cloneNode(true);
+  message.style.zIndex = '10000';
+  document.body.append(message);
+  document.removeEventListener('keydown', closeForm);
+  if (messageTemplate.classList.contains('success')) {
+    setToDefaults();
+    document.querySelector('.success__button').addEventListener('click', closeSuccessUploadMessage);
+    document.addEventListener('keydown', onSuccessEscKeydown);
+    document.addEventListener('click', onSuccessOuterAreaClick);
+  } else if (messageTemplate.classList.contains('error')) {
+    document.querySelector('.error__button').addEventListener('click', closeErrorUploadMessage);
+    document.addEventListener('keydown', onErrorEscKeydown);
+    document.addEventListener('click', onErrorOuterAreaClick);
+  }
 };
 
 function onEscKeydown (evt) {
@@ -124,3 +204,30 @@ function onEscKeydown (evt) {
     closeForm();
   }
 }
+
+const showAlert = (message) => {
+  const alertContainer = document.createElement('div');
+  alertContainer.classList.add('load-error-message');
+  alertContainer.style.zIndex = '100';
+  alertContainer.style.width = '500px';
+  alertContainer.style.position = 'absolute';
+  alertContainer.style.left = '0';
+  alertContainer.style.top = '0';
+  alertContainer.style.right = '0';
+  alertContainer.style.padding = '10px 3px';
+  alertContainer.style.margin = '0 auto';
+  alertContainer.style.fontSize = '26px';
+  alertContainer.style.textAlign = 'center';
+  alertContainer.style.lineHeight = '30px';
+  alertContainer.style.backgroundColor = '#f04848';
+  alertContainer.style.borderRadius = '15px';
+  alertContainer.style.textTransform = 'none';
+
+  alertContainer.textContent = message;
+
+  document.body.append(alertContainer);
+};
+
+uploadForm.onchange = openForm;
+
+export {setUserFormSubmit, showSummaryUploadMessage, showAlert};
