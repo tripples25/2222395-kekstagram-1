@@ -33,6 +33,7 @@ export const openBigPicture = (picture) => {
   bigPicture.querySelector('.likes-count').textContent = picture.likes;
   bigPicture.querySelector('.social__caption').textContent = picture.description;
   bigPicture.querySelector('.social__comments').innerHTML = '';
+  loadCommentsButton.classList.remove('hidden');
   pictureComments = picture.comments.slice();
   loadMoreComments();
 };
